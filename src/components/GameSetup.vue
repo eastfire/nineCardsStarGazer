@@ -24,7 +24,7 @@ const players = ref(['玩家1', '玩家2', '玩家3', '玩家4'])
 const emit = defineEmits(['startGame'])
 
 const onStart = () => {
-  console.log(123, players.value)
+  players.value = players.value.slice(0, playerCount.value)
   emit('startGame', players)
 }
 

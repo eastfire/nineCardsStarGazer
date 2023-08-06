@@ -7,6 +7,7 @@
 <script setup>
 import GameSetup from './GameSetup.vue'
 import InfoScan from './InfoScan.vue'
+import MainGame from './MainGame.vue'
 import { ref } from "vue"
 
 const state = ref("setup")

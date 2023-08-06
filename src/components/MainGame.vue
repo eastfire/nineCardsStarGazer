@@ -13,7 +13,10 @@
         <img class="symbol-card" :src="IMAGE_MAP[symbol]" />
       </a-radio-button>
     </a-radio-group>
-    <a-button class="confirm-ask" @click="onConfirmAsk">确定询问</a-button>
+    <div v-if="state === 'after-ask'" class="result-count">看到{{ resultCount }}个</div>
+    <a-button class="confirm-ask" @click="onConfirmAsk" v-if="state === 'before-ask'">确定询问</a-button>
+    <a-button class="confirm-ask" @click="onNextPlayer" v-if="state === 'after-ask'">下一个玩家{{ players[askingPlayerIndex]
+    }}</a-button>
   </div>
 </template>
 
@@ -49,28 +52,57 @@ const canAskPlayers = computed(() => {
   }
   return indexList
 })
-const askingPlayerIndex = ref(0)
+const askingPlayerIndex = ref(-1)
 const askingSymbol = ref('')
 const state = ref('before-ask')
 
 const onNextPlayer = () => {
-
+  playerIndex.value = askingPlayerIndex.value;
+  askingPlayerIndex.value = -1
+  askingSymbol.value = ''
 }
 
 const onConfirmAsk = () => {
-
+  state.value = 'after-ask'
 }
+
+const resultCount = computed(() => {
+  if (state.value === 'after-ask' && askingPlayerIndex.value !== -1) {
+    const symbol = askingSymbol.value;
+    const count = 0;
+
+    for (let i = 0; i < props.players.length; i++) {
+      if (i === askingPlayerIndex.value) {
+        if (props.playerHands[i].front === symbol) {
+          count++;
+        }
+      } else {
+        if (props.playerHands[i].back === symbol) {
+          count++;
+        }
+      }
+    }
+    return count;
+  }
+  return -1;
+})
 </script>
 
 <style scoped>
 .wrapper {
   justify-content: space-around;
 }
+
 .player-name {
   margin-bottom: 24px;
 }
 
 .symbol-card {
   width: 50px;
+}
+
+.result-count {
+  font-size: 48px;
+  font-weight: bolder;
 }
 </style>
