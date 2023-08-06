@@ -47,6 +47,8 @@ const IMAGE_MAP = {
 }
 
 const props = defineProps(['players'])
+const emit = defineEmits(['startPlay'])
+
 const playerIndex = ref(0)
 const state = ref('showing-card')
 const scaningPosition = ref('')
@@ -76,7 +78,12 @@ const onCancelScan = () => {
 }
 
 const onNext = () => {
-
+  if (playerIndex.value === props.players.value.length - 1) {
+    //last player
+    emit('startPlay', playerHands);
+  } else {
+    playerIndex.value++
+  }
 }
 </script>
 
@@ -101,6 +108,7 @@ const onNext = () => {
   border-radius: 24px;
   border: 1px dotted black;
   justify-content: center;
+  overflow: hidden;
 }
 
 .card-border.scaned {

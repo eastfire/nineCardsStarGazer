@@ -1,6 +1,7 @@
 <template>
   <GameSetup v-if="state === 'setup'" @start-game="onStartGame" />
-  <InfoScan v-if="state === 'info-scan'" :players="players" />
+  <InfoScan v-if="state === 'info-scan'" :players="players" @start-play="onStartPlay" />
+  <MainGame vi-if="main-game" :players="players" :playerHands="playerHands" />
 </template>
 
 <script setup>
@@ -10,10 +11,16 @@ import { ref } from "vue"
 
 const state = ref("setup")
 const players = ref([])
+const playerHands = ref([])
 
 const onStartGame = (p) => {
   state.value = 'info-scan'
   players.value = p.value;
+}
+
+const onStartPlay = (hands) => {
+  state.value = 'main-game';
+  playerHands.value = hands.value
 }
 
 </script>
