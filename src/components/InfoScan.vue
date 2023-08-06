@@ -7,14 +7,14 @@
         请扫描左边的牌
       </div>
       <div class='card-border scaned' v-else @click="scanCard('left')">
-        <img :src="IMAGE_MAP[playerHands[playerIndex].left.front]">
+        <img :src="IMAGE_MAP[playerHands[playerIndex].left.front]" class="card-image">
       </div>
       <div class='card-border my-row align-items-center' v-if="playerHands[playerIndex].right === null"
         @click="scanCard('right')">
         请扫描右边的牌
       </div>
       <div class='card-border scaned' v-else @click="scanCard('right')">
-        <img :src="IMAGE_MAP[playerHands[playerIndex].right.front]">
+        <img :src="IMAGE_MAP[playerHands[playerIndex].right.front]" class="card-image">
       </div>
     </div>
     <a-button @click="onNext"
@@ -88,6 +88,11 @@ const onNext = () => {
 .cards {
   column-gap: 24px;
   margin-bottom: 40px;
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
 }
 
 .card-border {
