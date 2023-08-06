@@ -1,21 +1,32 @@
 <template>
   <div class="my-column wrapper align-items-center">
-    <div class="player-name">当前玩家：{{ players[playerIndex] }}</div>
-    <div class="which-player">询问哪个玩家？</div>
-    <a-radio-group v-model:value="askingPlayerIndex" button-style="solid" class="count-select">
-      <a-radio-button v-for='index in canAskPlayers' :key="index" :value="index">
-        {{ players[index] }}
-      </a-radio-button>
-    </a-radio-group>
-    <div class="which-symbol">观察到哪个星体的数量？</div>
-    <a-radio-group v-model:value="askingSymbol" button-style="solid" class="count-select">
-      <a-radio-button v-for="symbol in ['sun', 'moon', 'star', 'earth', 'saturn', 'galaxy']" :key="symbol"
-        :value="symbol">
-        <img class="symbol-card" :src="IMAGE_MAP[symbol]" />
-      </a-radio-button>
-    </a-radio-group>
+    <div class="my-column ask-about">
+      <div class="player-name">当前玩家：{{ players[playerIndex] }}</div>
+      <a-button @click="checkHistory" v-if="state === 'before-ask'">查看历史提问</a-button>
+    </div>
+    <div class="my-column ask-about">
+      <div class="which-player">询问哪个玩家？</div>
+      <a-radio-group v-model:value="askingPlayerIndex" button-style="solid" class="count-select"
+        :disabled="state !== 'before-ask'">
+        <a-radio-button v-for='index in canAskPlayers' :key="index" :value="index"
+          :disabled="recentAskMap[playerIndex] === index">
+          {{ players[index] }}
+        </a-radio-button>
+      </a-radio-group>
+    </div>
+    <div class="my-column ask-about">
+      <div class="which-symbol">观察到哪个星体的数量？</div>
+      <a-radio-group v-model:value="askingSymbol" button-style="solid" class="count-select"
+        :disabled="state !== 'before-ask'">
+        <a-radio-button v-for="symbol in ['sun', 'moon', 'star', 'earth', 'saturn', 'galaxy']" :key="symbol"
+          :value="symbol" class="symbol-button">
+          <img class="symbol-card" :src="IMAGE_MAP[symbol]" />
+        </a-radio-button>
+      </a-radio-group>
+    </div>
     <div v-if="state === 'after-ask'" class="result-count">看到{{ resultCount }}个</div>
-    <a-button class="confirm-ask" @click="onConfirmAsk" v-if="state === 'before-ask'">确定询问</a-button>
+    <a-button class="confirm-ask" @click="onConfirmAsk" v-if="state === 'before-ask'"
+      :disabled="askingPlayerIndex === -1 || askingSymbol === ''">确定询问</a-button>
     <a-button class="confirm-ask" @click="onNextPlayer" v-if="state === 'after-ask'">下一个玩家{{ players[askingPlayerIndex]
     }}</a-button>
   </div>
@@ -43,6 +54,8 @@ const IMAGE_MAP = {
 
 const props = defineProps(['players', 'playerHands'])
 const playerIndex = ref(0)
+const recentAskMap = ref({})
+const history = ref({})
 const canAskPlayers = computed(() => {
   const indexList = []
   for (let i = 0; i < props.players.length; i++) {
@@ -50,7 +63,6 @@ const canAskPlayers = computed(() => {
       indexList.push(i)
     }
   }
-  console.log(11, indexList)
   return indexList
 })
 const askingPlayerIndex = ref(-1)
@@ -58,6 +70,8 @@ const askingSymbol = ref('')
 const state = ref('before-ask')
 
 const onNextPlayer = () => {
+  history.value.push({ playerIndex: playerIndex.value, askingPlayerIndex: askingPlayerIndex.value, askingSymbol: askingSymbol.value, resultCount: resultCount.value })
+  state.value = 'before-ask'
   playerIndex.value = askingPlayerIndex.value;
   askingPlayerIndex.value = -1
   askingSymbol.value = ''
@@ -65,20 +79,31 @@ const onNextPlayer = () => {
 
 const onConfirmAsk = () => {
   state.value = 'after-ask'
+  recentAskMap.value[playerIndex.value] = askingPlayerIndex.value;
+}
+
+const checkHistory = () => {
+
 }
 
 const resultCount = computed(() => {
   if (state.value === 'after-ask' && askingPlayerIndex.value !== -1) {
     const symbol = askingSymbol.value;
-    const count = 0;
+    let count = 0;
 
     for (let i = 0; i < props.players.length; i++) {
       if (i === askingPlayerIndex.value) {
-        if (props.playerHands[i].front === symbol) {
+        if (props.playerHands[i].left.front === symbol) {
+          count++;
+        }
+        if (props.playerHands[i].right.front === symbol) {
           count++;
         }
       } else {
-        if (props.playerHands[i].back === symbol) {
+        if (props.playerHands[i].left.back === symbol) {
+          count++;
+        }
+        if (props.playerHands[i].right.back === symbol) {
           count++;
         }
       }
@@ -100,8 +125,18 @@ const resultCount = computed(() => {
   margin-bottom: 24px;
 }
 
-.symbol-card {
+.ask-about {
+  row-gap: 8px;
+}
+
+.symbol-button {
   width: 50px;
+  height: 72px;
+  padding: 8px 4px 8px 4px;
+}
+
+.symbol-card {
+  width: 42px;
 }
 
 .result-count {

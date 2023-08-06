@@ -29,22 +29,7 @@
 import { ref } from "vue"
 import { Button } from 'ant-design-vue'
 import QrcodeReader from "./QrcodeReader.vue"
-
-import sunImg from "../assets/images/sun.png"
-import moonImg from "../assets/images/moon.png"
-import starImg from "../assets/images/star.png"
-import earthImg from "../assets/images/earth.png"
-import saturnImg from "../assets/images/saturn.png"
-import galaxyImg from "../assets/images/galaxy.png"
-
-const IMAGE_MAP = {
-  sun: sunImg,
-  moon: moonImg,
-  star: starImg,
-  earth: earthImg,
-  saturn: saturnImg,
-  galaxy: galaxyImg,
-}
+import { IMAGE_MAP } from './utils'
 
 const props = defineProps(['players'])
 const emit = defineEmits(['startPlay'])
@@ -53,7 +38,7 @@ const playerIndex = ref(0)
 const state = ref('showing-card')
 const scaningPosition = ref('')
 
-const playerHands = ref([{
+const playerHands = import.meta.env.MODE === 'development' ? ref([{
   left: { front: 'sun', back: 'star' }, right: { front: 'sun', back: 'moon' }
 }, {
   left: { front: 'moon', back: 'saturn' }, right: { front: 'saturn', back: 'star' }
@@ -61,16 +46,15 @@ const playerHands = ref([{
   left: { front: 'moon', back: 'galaxy' }, right: { front: 'saturn', back: 'earth' }
 }, {
   left: { front: 'earth', back: 'galaxy' }, right: { front: 'star', back: 'galaxy' }
+}]) : ref([{
+  left: null, right: null
+}, {
+  left: null, right: null
+}, {
+  left: null, right: null
+}, {
+  left: null, right: null
 }])
-// const playerHands = ref([{
-//   left: null, right: null
-// }, {
-//   left: null, right: null
-// }, {
-//   left: null, right: null
-// }, {
-//   left: null, right: null
-// }])
 
 const scanCard = (position) => {
   scaningPosition.value = position;
