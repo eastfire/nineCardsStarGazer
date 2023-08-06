@@ -67,6 +67,7 @@ const scanCard = (position) => {
 }
 
 const onScaned = (cardInfo) => {
+  window.alert(JSON.stringify(cardInfo))
   playerHands.value[playerIndex.value][scaningPosition.value] = cardInfo;
   state.value = 'showing-card'
 }
