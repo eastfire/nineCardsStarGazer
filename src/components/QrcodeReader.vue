@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper my-column">
     <a-button class="back" @click="onBack">&lt;返回</a-button>
-    <qrcode-stream :track="paintBoundingBox" @init="logErrors" @decode="onDecode" :style="{ width: '320px' }" />
+    <qrcode-stream :track="paintBoundingBox" @init="logErrors" @detect="onDetect" :style="{ width: '320px' }" />
   </div>
 </template>
 
@@ -44,8 +44,9 @@ const paintBoundingBox = (detectedCodes, ctx) => {
   }
 }
 
-const onDecode = (url) => {
+const onDetect = (url) => {
   console.log('get url', url)
+  window.alert(url)
   if (CARD_QRCODE_MAP[url]) {
     emit('scaned', CARD_QRCODE_MAP[url])
   } else {
