@@ -44,9 +44,10 @@ const paintBoundingBox = (detectedCodes, ctx) => {
   }
 }
 
-const onDetect = (data) => {
+const onDetect = (data, data2) => {
   const url = data.rawValue;
-  window.alert(data.rawValue)
+  window.alert(JSON.stringify(data))
+  window.alert(JSON.stringify(data2))
   if (CARD_QRCODE_MAP[url]) {
     emit('scaned', CARD_QRCODE_MAP[url])
   } else {
