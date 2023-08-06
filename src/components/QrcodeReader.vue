@@ -65,10 +65,18 @@ function logErrors(promise) {
 
 <style scoped>
 .wrapper {
-  width: 100%
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
 .back {
-  margin-bottom: 16px;
+  position: fixed;
+  z-index: 1100;
+  top: 0;
+  left: 0;
 }
 </style>
