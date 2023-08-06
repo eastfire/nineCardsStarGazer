@@ -35,22 +35,7 @@
 <script setup>
 import { ref, computed } from "vue"
 import { RadioGroup, RadioButton, Button } from 'ant-design-vue'
-
-import sunImg from "../assets/images/sun.png"
-import moonImg from "../assets/images/moon.png"
-import starImg from "../assets/images/star.png"
-import earthImg from "../assets/images/earth.png"
-import saturnImg from "../assets/images/saturn.png"
-import galaxyImg from "../assets/images/galaxy.png"
-
-const IMAGE_MAP = {
-  sun: sunImg,
-  moon: moonImg,
-  star: starImg,
-  earth: earthImg,
-  saturn: saturnImg,
-  galaxy: galaxyImg,
-}
+import { IMAGE_MAP } from './utils.js'
 
 const props = defineProps(['players', 'playerHands'])
 const playerIndex = ref(0)
@@ -83,7 +68,7 @@ const onConfirmAsk = () => {
 }
 
 const checkHistory = () => {
-
+  state.value = 'check-history'
 }
 
 const resultCount = computed(() => {

@@ -29,7 +29,7 @@
 import { ref } from "vue"
 import { Button } from 'ant-design-vue'
 import QrcodeReader from "./QrcodeReader.vue"
-import { IMAGE_MAP } from './utils'
+import { IMAGE_MAP } from './utils.js'
 
 const props = defineProps(['players'])
 const emit = defineEmits(['startPlay'])

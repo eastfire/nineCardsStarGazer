@@ -13,7 +13,7 @@
 
 <script setup>
 import { Button } from 'ant-design-vue'
-import { IMAGE_MAP } from './utils'
+import { IMAGE_MAP } from './utils.js'
 
 defineEmits(['back'])
 defineProps(['history', 'players'])
