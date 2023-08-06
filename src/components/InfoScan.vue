@@ -25,6 +25,7 @@
 <script setup>
 import { ref } from "vue"
 import { Button } from 'ant-design-vue'
+import QrcodeReader from "./QrcodeReader.vue"
 
 import sunImg from "../assets/images/sun.png"
 import moonImg from "../assets/images/moon.png"
@@ -66,6 +67,10 @@ const onScaned = (cardInfo) => {
   playerHands.value[playerIndex.value][scaningPosition.value] = cardInfo;
   state.value = 'showing-card'
 }
+
+const onNext = () => {
+
+}
 </script>
 
 <style scoped>
@@ -75,11 +80,12 @@ const onScaned = (cardInfo) => {
 
 .cards {
   column-gap: 24px;
+  margin-bottom: 40px;
 }
 
 .card-border {
-  width: 240px;
-  height: 320px;
+  width: 120px;
+  height: 160px;
   border-radius: 24px;
   border: 1px dotted black;
   justify-content: center;

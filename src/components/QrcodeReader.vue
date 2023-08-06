@@ -7,7 +7,6 @@
 <script setup>
 import { QrcodeStream } from "vue-qrcode-reader"
 
-
 const CARD_QRCODE_MAP = {
   'EDE7D5AA-F55A-C8AF-BFC1-8745AC1BE802': { front: 'sun', back: 'earth' },
   'DBD0EA09-E2FF-962B-C394-902E2F6F8B39': { front: 'sun', back: 'moon' },
