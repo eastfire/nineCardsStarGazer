@@ -78,7 +78,7 @@ const onCancelScan = () => {
 }
 
 const onNext = () => {
-  if (playerIndex.value === props.players.value.length - 1) {
+  if (playerIndex.value === props.players.length - 1) {
     //last player
     emit('startPlay', playerHands);
   } else {
