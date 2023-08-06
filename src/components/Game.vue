@@ -1,7 +1,7 @@
 <template>
   <GameSetup v-if="state === 'setup'" @start-game="onStartGame" />
   <InfoScan v-if="state === 'info-scan'" :players="players" @start-play="onStartPlay" />
-  <MainGame vi-if="main-game" :players="players" :playerHands="playerHands" />
+  <MainGame v-if="state === 'main-game'" :players="players" :playerHands="playerHands" />
 </template>
 
 <script setup>

@@ -1,5 +1,5 @@
 <template>
-  <div class="my-column wrapper" v-if="state === 'showing-card'">
+  <div class="my-column wrapper align-items-center">
     <div class="player-name">当前玩家：{{ players[playerIndex] }}</div>
     <div class="which-player">询问哪个玩家？</div>
     <a-radio-group v-model:value="askingPlayerIndex" button-style="solid" class="count-select">
@@ -9,7 +9,8 @@
     </a-radio-group>
     <div class="which-symbol">观察到哪个星体的数量？</div>
     <a-radio-group v-model:value="askingSymbol" button-style="solid" class="count-select">
-      <a-radio-button v-for="symbol in ['sun', 'moon', 'star', 'earth']" :key="symbol" :value="symbol">
+      <a-radio-button v-for="symbol in ['sun', 'moon', 'star', 'earth', 'saturn', 'galaxy']" :key="symbol"
+        :value="symbol">
         <img class="symbol-card" :src="IMAGE_MAP[symbol]" />
       </a-radio-button>
     </a-radio-group>
@@ -41,15 +42,15 @@ const IMAGE_MAP = {
 }
 
 const props = defineProps(['players', 'playerHands'])
-
 const playerIndex = ref(0)
 const canAskPlayers = computed(() => {
   const indexList = []
-  for (let i = 0; i < props.players.lenth; i++) {
+  for (let i = 0; i < props.players.length; i++) {
     if (i !== playerIndex.value) {
       indexList.push(i)
     }
   }
+  console.log(11, indexList)
   return indexList
 })
 const askingPlayerIndex = ref(-1)
@@ -91,6 +92,8 @@ const resultCount = computed(() => {
 <style scoped>
 .wrapper {
   justify-content: space-around;
+  width: 100%;
+  height: 100%;
 }
 
 .player-name {

@@ -54,14 +54,23 @@ const state = ref('showing-card')
 const scaningPosition = ref('')
 
 const playerHands = ref([{
-  left: null, right: null
+  left: { front: 'sun', back: 'star' }, right: { front: 'sun', back: 'moon' }
 }, {
-  left: null, right: null
+  left: { front: 'moon', back: 'saturn' }, right: { front: 'saturn', back: 'star' }
 }, {
-  left: null, right: null
+  left: { front: 'moon', back: 'galaxy' }, right: { front: 'saturn', back: 'earth' }
 }, {
-  left: null, right: null
+  left: { front: 'earth', back: 'galaxy' }, right: { front: 'star', back: 'galaxy' }
 }])
+// const playerHands = ref([{
+//   left: null, right: null
+// }, {
+//   left: null, right: null
+// }, {
+//   left: null, right: null
+// }, {
+//   left: null, right: null
+// }])
 
 const scanCard = (position) => {
   scaningPosition.value = position;
