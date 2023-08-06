@@ -17,9 +17,12 @@
         <img :src="IMAGE_MAP[playerHands[playerIndex].right.front]">
       </div>
     </div>
-    <a-button @click="onNext">下一个玩家</a-button>
+    <a-button @click="onNext"
+      :disabled="playerHands[playerIndex].left === null || playerHands[playerIndex].right === null">
+      {{ playerIndex === players.length - 1 ? '开始游戏' : '下一个玩家' }}
+    </a-button>
   </div>
-  <QrcodeReader v-if="state === 'scanning'" @scaned="onScaned" />
+  <QrcodeReader v-if="state === 'scanning'" @scaned="onScaned" @cancel="onCancelScan" />
 </template>
 
 <script setup>
@@ -65,6 +68,10 @@ const scanCard = (position) => {
 
 const onScaned = (cardInfo) => {
   playerHands.value[playerIndex.value][scaningPosition.value] = cardInfo;
+  state.value = 'showing-card'
+}
+
+const onCancelScan = () => {
   state.value = 'showing-card'
 }
 

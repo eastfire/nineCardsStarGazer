@@ -1,6 +1,7 @@
 <template>
-  <div>
-    <qrcode-stream :track="paintOutline" @init="logErrors" @decode="onDecode" />
+  <div class="wrapper my-column">
+    <a-button class="back" @click="onBack">&lt;返回</a-button>
+    <qrcode-stream :track="paintOutline" @init="logErrors" @decode="onDecode" :style="{ width: '100%' }" />
   </div>
 </template>
 
@@ -28,7 +29,7 @@ const CARD_QRCODE_MAP = {
   '46546C4D-5E0D-3AA5-9121-C7AD79783723': { front: '', back: '' },
 }
 
-const emit = defineEmits(['scaned'])
+const emit = defineEmits(['scaned', 'cancel'])
 
 const paintOutline = (detectedCodes, ctx) => {
   for (const detectedCode of detectedCodes) {
@@ -56,10 +57,22 @@ const onDecode = (url) => {
   }
 }
 
+const onBack = () => {
+  emit('cancel')
+}
+
 function logErrors(promise) {
   promise.catch(console.error)
 }
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+  width: 100%
+}
+
+.back {
+  margin-bottom: 16px;
+}
+</style>
