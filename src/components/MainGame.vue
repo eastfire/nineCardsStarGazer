@@ -1,5 +1,5 @@
 <template>
-  <div class="my-column wrapper align-items-center">
+  <div class="my-column wrapper align-items-center" v-if="state !== 'check-history'">
     <div class="my-column ask-about">
       <div class="player-name">当前玩家：{{ players[playerIndex] }}</div>
       <a-button @click="checkHistory" v-if="state === 'before-ask'">查看历史提问</a-button>
@@ -30,17 +30,19 @@
     <a-button class="confirm-ask" @click="onNextPlayer" v-if="state === 'after-ask'">下一个玩家{{ players[askingPlayerIndex]
     }}</a-button>
   </div>
+  <CheckHistory v-if="state === 'check-history'" @back="state = 'before-ask'" :players="players" :history="history" />
 </template>
 
 <script setup>
 import { ref, computed } from "vue"
 import { RadioGroup, RadioButton, Button } from 'ant-design-vue'
 import { IMAGE_MAP } from './utils.js'
+import CheckHistory from "./CheckHistory.vue"
 
 const props = defineProps(['players', 'playerHands'])
 const playerIndex = ref(0)
 const recentAskMap = ref({})
-const history = ref({})
+const history = ref([])
 const canAskPlayers = computed(() => {
   const indexList = []
   for (let i = 0; i < props.players.length; i++) {
