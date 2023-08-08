@@ -68,10 +68,11 @@ export const RULE_CHECK_MAP = {
       if (playerHands[i].left === 'saturn' && playerHands[i].right === symbol ||
         playerHands[i].right === 'saturn' && playerHands[i].left === symbol) {
         adjust++;
-        reason += `${players[i]}有${SYMBOL_MAP['saturn']}且另一张牌是${SYMBOL_MAP[symbol]}；`
+        reason += `${players[i]}有${SYMBOL_MAP['saturn']}且另一张牌是${SYMBOL_MAP[symbol]};`
       }
     }
     if (adjust > 0) {
+      reason += `总共加${adjust}`
       return { adjust: adjust, reason };
     }
     return undefined
