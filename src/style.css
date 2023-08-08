@@ -119,3 +119,8 @@ button:focus-visible {
 .my-row.align-items-center {
   align-items: center;
 }
+
+.my-column.justify-center,
+.my-row.justify-center {
+  justify-content: center;
+}

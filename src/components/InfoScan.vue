@@ -1,89 +1,45 @@
 <template>
-  <div class="my-column" v-if="state === 'showing-card'">
-    <div class="player-name">当前玩家：{{ players[playerIndex] }}</div>
+  <div class="my-column">
+    <div class="player-name">请输入自己的手牌</div>
     <div class="my-row cards">
-      <div class='card-border my-row align-items-center' v-if="playerHands[playerIndex].left === null"
-        @click="scanCard('left')">
-        请扫描左边的牌
-      </div>
-      <div class='card-border scaned' v-else @click="scanCard('left')">
-        <img :src="IMAGE_MAP[playerHands[playerIndex].left.front]" class="card-image">
-      </div>
-      <div class='card-border my-row align-items-center' v-if="playerHands[playerIndex].right === null"
-        @click="scanCard('right')">
-        请扫描右边的牌
-      </div>
-      <div class='card-border scaned' v-else @click="scanCard('right')">
-        <img :src="IMAGE_MAP[playerHands[playerIndex].right.front]" class="card-image">
+      <CardInput v-model="playerHands[0].left" />
+      <CardInput v-model="playerHands[0].right" />
+    </div>
+    <div class="my-column player-list">
+      <div v-for="(_value, index) of (new Array(players.length - 1))" :key="index" class="my-column">
+        <span class="my-row no-wrap align-items-center hint">请输入{{ players[index + 1] }}的手牌背面</span>
+        <span class="my-row cards">
+          <CardInput v-model="playerHands[index + 1].left" />
+          <CardInput v-model="playerHands[index + 1].right" />
+        </span>
       </div>
     </div>
-    <a-button @click="onNext"
-      :disabled="playerHands[playerIndex].left === null || playerHands[playerIndex].right === null">
-      {{ playerIndex === players.length - 1 ? '开始游戏' : '下一个玩家' }}
+    <a-button @click="onStartPlay" :disabled="playerHands.some(hand => hand.left === null || hand.right === null)">
+      开始游戏
     </a-button>
   </div>
-  <QrcodeReader v-if="state === 'scanning'" @scaned="onScaned" @cancel="onCancelScan" />
 </template>
 
 <script setup>
 import { ref } from "vue"
 import { Button } from 'ant-design-vue'
-import QrcodeReader from "./QrcodeReader.vue"
-import { IMAGE_MAP } from './utils.js'
+import CardInput from "./CardInput.vue"
 
 const props = defineProps(['players'])
 const emit = defineEmits(['startPlay'])
 
-const playerIndex = ref(0)
-const state = ref('showing-card')
 const scaningPosition = ref('')
 
-const playerHands = import.meta.env.MODE === 'development' ? ref([{
-  left: { front: 'sun', back: 'star' }, right: { front: 'sun', back: 'moon' }
-}, {
-  left: { front: 'moon', back: 'saturn' }, right: { front: 'saturn', back: 'star' }
-}, {
-  left: { front: 'moon', back: 'galaxy' }, right: { front: 'saturn', back: 'earth' }
-}, {
-  left: { front: 'earth', back: 'galaxy' }, right: { front: 'star', back: 'galaxy' }
-}]) : ref([{
+const playerHands = ref((new Array(props.players.length).fill(1)).map(_i => ({
   left: null, right: null
-}, {
-  left: null, right: null
-}, {
-  left: null, right: null
-}, {
-  left: null, right: null
-}])
+})))
 
-const scanCard = (position) => {
-  scaningPosition.value = position;
-  state.value = 'scanning';
-}
-
-const onScaned = (cardInfo) => {
-  playerHands.value[playerIndex.value][scaningPosition.value] = cardInfo;
-  state.value = 'showing-card'
-}
-
-const onCancelScan = () => {
-  state.value = 'showing-card'
-}
-
-const onNext = () => {
-  if (playerIndex.value === props.players.length - 1) {
-    //last player
-    emit('startPlay', playerHands);
-  } else {
-    playerIndex.value++
-  }
+const onStartPlay = () => {
+  emit('startPlay', playerHands);
 }
 </script>
 
 <style scoped>
-.player-name {
-  margin-bottom: 24px;
-}
 
 .cards {
   column-gap: 24px;
@@ -96,8 +52,8 @@ const onNext = () => {
 }
 
 .card-border {
-  width: 120px;
-  height: 160px;
+  width: 60px;
+  height: 80px;
   border-radius: 24px;
   border: 1px dotted black;
   justify-content: center;
